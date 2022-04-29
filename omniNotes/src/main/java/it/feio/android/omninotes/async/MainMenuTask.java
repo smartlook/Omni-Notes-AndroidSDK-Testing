@@ -69,6 +69,7 @@ public class MainMenuTask extends AsyncTask<Void, Void, List<NavigationItem>> {
       mDrawerList.setOnItemClickListener((arg0, arg1, position, arg3) -> {
         String navigation = mFragmentWeakReference.get().getResources().getStringArray(R.array
             .navigation_list_codes)[items.get(position).getArrayIndex()];
+
         updateNavigation(position, navigation);
       });
       mDrawerList.justifyListViewHeightBasedOnChildren();

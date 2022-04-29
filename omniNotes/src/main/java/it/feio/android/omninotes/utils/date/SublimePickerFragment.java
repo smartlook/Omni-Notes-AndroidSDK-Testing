@@ -29,6 +29,8 @@ import com.appeaser.sublimepickerlibrary.helpers.SublimeListenerAdapter;
 import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
 import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicker;
 import it.feio.android.omninotes.R;
+import it.feio.android.omninotes.smartlook.SmartlookHandler;
+
 import java.text.DateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -61,6 +63,7 @@ public class SublimePickerFragment extends DialogFragment {
         mCallback.onDateTimeRecurrenceSet(selectedDate,
             hourOfDay, minute, recurrenceOption, recurrenceRule);
       }
+      SmartlookHandler.onDateTimePickerSet();
       dismiss();
     }
   };

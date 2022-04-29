@@ -79,6 +79,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.smartlook.sdk.smartlook.core.api.Smartlook;
+
 import de.greenrobot.event.EventBus;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -107,6 +109,7 @@ import it.feio.android.omninotes.models.adapters.NoteAdapter;
 import it.feio.android.omninotes.models.listeners.OnViewTouchedListener;
 import it.feio.android.omninotes.models.listeners.RecyclerViewItemClickSupport;
 import it.feio.android.omninotes.models.views.Fab;
+import it.feio.android.omninotes.smartlook.SmartlookHandler;
 import it.feio.android.omninotes.utils.AnimationsHelper;
 import it.feio.android.omninotes.utils.IntentChecker;
 import it.feio.android.omninotes.utils.KeyboardUtils;
@@ -256,10 +259,13 @@ public class ListFragment extends BaseFragment implements OnViewTouchedListener,
   private void initFab() {
     fab = new Fab(binding.fab.getRoot(), binding.list,
         Prefs.getBoolean(PREF_FAB_EXPANSION_BEHAVIOR, false));
+
     fab.setOnFabItemClickedListener(id -> {
       View v = mainActivity.findViewById(id);
+      SmartlookHandler.onFabItemClick(id);
       switch (id) {
         case R.id.fab_camera:
+          Smartlook.getInstance().trackEvent("fab_camera");
           Intent i = mainActivity.getIntent();
           i.setAction(ACTION_FAB_TAKE_PHOTO);
           mainActivity.setIntent(i);

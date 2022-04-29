@@ -23,10 +23,14 @@ import static it.feio.android.omninotes.utils.ConstantsBase.PREF_LANG;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.StrictMode;
+
 import androidx.multidex.MultiDexApplication;
 import com.pixplicity.easyprefs.library.Prefs;
+
 import it.feio.android.omninotes.helpers.LanguageHelper;
 import it.feio.android.omninotes.helpers.notifications.NotificationsHelper;
+import it.feio.android.omninotes.smartlook.SmartlookHandler;
+
 import org.acra.ACRA;
 import org.acra.annotation.AcraCore;
 import org.acra.annotation.AcraHttpSender;
@@ -64,6 +68,7 @@ public class OmniNotes extends MultiDexApplication {
     initSharedPreferences();
     enableStrictMode();
     new NotificationsHelper(this).initNotificationChannels();
+    SmartlookHandler.onApplicationCreate(this);
   }
 
   private void initSharedPreferences() {

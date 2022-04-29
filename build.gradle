@@ -40,6 +40,25 @@ allprojects {
         maven { url "https://jitpack.io" }
         maven { url "https://plugins.gradle.org/m2/" }
         google()
+
+        /**
+         * Smartlook production release repository.
+         */
+//        maven {
+//            url "https://sdk.smartlook.com/android/release"
+//        }
+
+        /**
+         * Smartlook test release repository.
+         */
+        maven {
+            allowInsecureProtocol = true
+            url "http://artifactory.smartlook.com:8081/artifactory/libs-release-local"
+            credentials {
+                username = project.findProperty("sl_artifactory_username")
+                password = project.findProperty("sl_artifactory_password")
+            }
+        }
     }
 }
 

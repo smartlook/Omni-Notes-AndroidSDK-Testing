@@ -202,6 +202,11 @@ dependencies {
     }
     implementation 'com.github.federicoiosue:pixlui:3.0.0'
 
+    /**
+     * Smartlook SDK dependency.
+     */
+    implementation 'com.smartlook.recording:app:2.0.0-native-pre-release-no-proguard-2'
+
     // Flavors specific dependencies
     playImplementation 'io.nlopez.smartlocation:library:3.2.4'
     betaImplementation 'io.nlopez.smartlocation:library:3.2.4'

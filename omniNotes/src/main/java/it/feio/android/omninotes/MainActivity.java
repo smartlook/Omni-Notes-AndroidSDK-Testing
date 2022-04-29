@@ -64,6 +64,7 @@ import it.feio.android.omninotes.models.Attachment;
 import it.feio.android.omninotes.models.Category;
 import it.feio.android.omninotes.models.Note;
 import it.feio.android.omninotes.models.ONStyle;
+import it.feio.android.omninotes.smartlook.SmartlookHandler;
 import it.feio.android.omninotes.utils.FileProviderHelper;
 import it.feio.android.omninotes.utils.PasswordHelper;
 import it.feio.android.omninotes.utils.SystemHelper;
@@ -132,6 +133,8 @@ public class MainActivity extends BaseActivity implements
     setSupportActionBar(binding.toolbar.toolbar);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setHomeButtonEnabled(true);
+
+    SmartlookHandler.createRecordingMaskForToolbar(getToolbar());
   }
 
 
