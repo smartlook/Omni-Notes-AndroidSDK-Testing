@@ -79,7 +79,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.smartlook.sdk.smartlook.core.api.Smartlook;
+import com.smartlook.android.core.api.Smartlook;
 
 import de.greenrobot.event.EventBus;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -262,7 +262,7 @@ public class ListFragment extends BaseFragment implements OnViewTouchedListener,
 
     fab.setOnFabItemClickedListener(id -> {
       View v = mainActivity.findViewById(id);
-      SmartlookHandler.onFabItemClick(id);
+      SmartlookHandler.onFabItemClick(getContext(), id);
       switch (id) {
         case R.id.fab_camera:
           Smartlook.getInstance().trackEvent("fab_camera");
@@ -275,6 +275,9 @@ public class ListFragment extends BaseFragment implements OnViewTouchedListener,
           Note note = new Note();
           note.setChecklist(true);
           editNote(note, v);
+          break;
+        case R.id.fab_all_preferences:
+        case R.id.fab_sensitivity_playground:
           break;
         default:
           editNote(new Note(), v);
@@ -849,6 +852,7 @@ public class ListFragment extends BaseFragment implements OnViewTouchedListener,
           switchNotesView();
           break;
         case R.id.menu_empty_trash:
+          SmartlookHandler.onEmptyTrash();
           emptyTrash();
           break;
         default:

@@ -1,18 +1,30 @@
 package it.feio.android.omninotes.smartlook
 
-import android.app.Application
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.util.Log
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import com.smartlook.sdk.smartlook.core.api.Session
-import com.smartlook.sdk.smartlook.core.api.Smartlook
-import com.smartlook.sdk.smartlook.core.api.User
-import com.smartlook.sdk.smartlook.core.api.model.Properties
-import com.smartlook.sdk.smartlook.core.api.model.RecordingMask
-import com.smartlook.sdk.smartlook.core.api.model.Referrer
-import com.smartlook.sdk.smartlook.util.logging.annotation.LogAspect
+import com.smartlook.android.core.api.Session
+import com.smartlook.android.core.api.Smartlook
+import com.smartlook.android.core.api.User
+import com.smartlook.android.core.api.enumeration.Status
+import com.smartlook.android.core.api.extension.isSensitive
+import com.smartlook.android.core.api.model.Properties
+import com.smartlook.android.core.api.model.RecordingMask
+import com.smartlook.android.core.api.model.Referrer
+import com.smartlook.android.util.logging.annotation.LogAspect
 import it.feio.android.omninotes.R
+import it.feio.android.omninotes.SensitivityPlayground
 import java.net.URL
-import java.util.*
+
 
 object SmartlookHandler {
 
@@ -23,15 +35,16 @@ object SmartlookHandler {
      * @param application Application context
      */
     @JvmStatic
-    fun onApplicationCreate(application: Application) {
+    fun onApplicationCreate() {
 
-        // Setup SDK and obtain Smartlook instance
-        instance = Smartlook.setup(application).apply {
-            log.allowedLogAspects = LogAspect.ALL
-        }
+        // Obtain Smartlook instance
+        instance = Smartlook.instance
+
+        // Enable all logging
+        instance.log.allowedLogAspects = LogAspect.ALL
 
         // Set project key
-        instance.preferences.projectKey = "beta_af1c6a1b02af422c51a62511ee67b867123f05b1" //FIXME
+        instance.preferences.projectKey = "187b9f5b05200261f86fddd57f27f9a38c0584d0"
 
         // Start recording
         instance.start()
@@ -41,7 +54,6 @@ object SmartlookHandler {
 
         // Set test referrer
         instance.referrer = Referrer("test_referrer", "test_source")
-
 
         // Set sample "global" event properties
         instance.eventProperties
@@ -96,6 +108,7 @@ object SmartlookHandler {
             // Global
             //enableAll()
             //disableAll()
+            //default()
 
             // Navigation
             //navigation.enableAll()
@@ -117,10 +130,19 @@ object SmartlookHandler {
     }
 
     /**
+     * Called when FAB itself is clicked.
+     */
+    @JvmStatic
+    fun onFabClick() {
+        //instance.preferences.projectKey = "187b9f5b05200261f86fddd57f27f9a38c0584d0"
+        Smartlook.instance.trackEvent("fab_click")
+    }
+
+    /**
      * Called when one of FAB items is clicked.
      */
     @JvmStatic
-    fun onFabItemClick(id: Int) {
+    fun onFabItemClick(context: Context?, id: Int) {
         when(id) {
 
             /**
@@ -146,8 +168,37 @@ object SmartlookHandler {
             /**
              * "Text note" item clicked.
              */
-            else -> {
+            R.id.fab_note -> {
                 Smartlook.instance.trackEvent("fab_text_note_item_click")
+            }
+
+            /**
+             * Smartlook custom. List all preferences.
+             */
+            R.id.fab_all_preferences -> {
+                with(Smartlook.instance.state) {
+                    Log.d("Smartlook", "State\n" +
+                            "isRecording: ${status.isRecording()}\n" +
+                            "status = ${status.javaClass.simpleName}\n" +
+                            "cause = ${if (status is Status.NotRecording) (status as Status.NotRecording).cause else "-"}\n" +
+                            "projectKey = $projectKey\n" +
+                            "frameRate = $frameRate\n" +
+                            "renderingMode = ${renderingMode.name}\n" +
+                            "renderingModeOption = ${renderingModeOption?.name}\n" +
+                            "isAdaptiveFrameRateEnabled = $isAdaptiveFrameRateEnabled\n" +
+                            "isSurfaceCaptureEnabled = $isSurfaceCaptureEnabled\n" +
+                            "isUploadUsingAndroidJobsEnabled = $isUploadUsingAndroidJobsEnabled\n" +
+                            "eventTracking.navigation.isActivityEnabled: ${eventTracking.navigation.isActivityEnabled}\n" +
+                            "eventTracking.navigation.isFragmentEnabled: ${eventTracking.navigation.isFragmentEnabled}\n" +
+                            "eventTracking.interaction.isTouchEnabled: ${eventTracking.interaction.isTouchEnabled}\n" +
+                            "eventTracking.interaction.isSelectorEnabled: ${eventTracking.interaction.isSelectorEnabled}\n" +
+                            "eventTracking.interaction.isRageClickEnabled: ${eventTracking.interaction.isRageClickEnabled}" )
+                }
+            }
+            R.id.fab_sensitivity_playground -> {
+                context?.let {
+                    it.startActivity(Intent(it, SensitivityPlayground::class.java))
+                }
             }
         }
     }
@@ -156,7 +207,7 @@ object SmartlookHandler {
      * Called in [MainActivity] on UI initialization. Covers whole Toolbar.
      */
     @JvmStatic
-    fun createRecordingMaskForToolbar(toolbar: Toolbar) {
+    fun onMainActivityUIInit(toolbar: Toolbar) {
         Smartlook.instance.sensitivity.recordingMask = RecordingMask(
             listOf(
                 RecordingMask.Element(
@@ -175,5 +226,65 @@ object SmartlookHandler {
         Smartlook.instance.trackEvent("set_date_time")
     }
 
+    /**
+     * Called when user clicks "Empty trash" in menu.
+     */
+    @JvmStatic
+    fun onEmptyTrash() {
+        //Smartlook.instance.user.session.openNew()
+    }
 
+    /**
+     * Called when SensitivityPlayground is entered.
+     */
+    @SuppressLint("SetJavaScriptEnabled")
+    @JvmStatic
+    fun onSensitivityPlayground(context: Activity) {
+
+        // Views binding
+        val buttonA = context.findViewById<Button>(R.id.buttonA)
+        val buttonB = context.findViewById<Button>(R.id.buttonB)
+        val imageViewA = context.findViewById<ImageView>(R.id.imageViewA)
+        val imageViewB = context.findViewById<ImageView>(R.id.imageViewB)
+        val textView = context.findViewById<TextView>(R.id.textView)
+        val editText = context.findViewById<EditText>(R.id.editText)
+        val webView = context.findViewById<WebView>(R.id.webView)
+
+        // Remove edit text from sensitive classes
+        EditText::class.isSensitive = false
+
+        // Mark imageViewA as sensitive
+        imageViewA.isSensitive = true
+
+        // Mark all buttons to be sensitive but "whitelist" buttonA
+        Button::class.isSensitive = true
+        buttonA.isSensitive = false
+
+        // Load WebView with html that has sensitive elements
+        val html = """
+            <!DOCTYPE html>
+            <html>
+            
+            <head>
+              <title>Our Company</title>
+            </head>
+            
+            <body>
+            
+              <h1>Welcome to Our Company</h1>
+              <h2>Web Site Main Ingredients:</h2>
+            
+              <p class='smartlook-hide'>Pages (HTML)</p>
+              <p>Style Sheets (CSS)</p>
+              <p class='smartlook-hide'>Computer Code (JavaScript)</p>
+              <p>Live Data (Files and Databases)</p>
+            
+            </body>
+            </html>
+        """.trimIndent()
+
+        webView.webViewClient = WebViewClient()
+        webView.settings.javaScriptEnabled = true
+        webView.loadData(html, "text/html", "UTF-8");
+    }
 }

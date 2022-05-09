@@ -66,9 +66,9 @@ public class OmniNotes extends MultiDexApplication {
     super.onCreate();
     mContext = getApplicationContext();
     initSharedPreferences();
-    enableStrictMode();
+    //enableStrictMode();
     new NotificationsHelper(this).initNotificationChannels();
-    SmartlookHandler.onApplicationCreate(this);
+    SmartlookHandler.onApplicationCreate();
   }
 
   private void initSharedPreferences() {

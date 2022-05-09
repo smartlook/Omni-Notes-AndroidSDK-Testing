@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SensitivityPlayground">
+
+    <Button
+        android:id="@+id/buttonA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button A"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button B"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonA"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:scaleType="fitXY"
+        android:id="@+id/imageViewA"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonA"
+        app:srcCompat="@color/colorAccent" />
+
+    <ImageView
+        android:scaleType="centerCrop"
+        android:id="@+id/imageViewB"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/action_color" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sed dolor vitae urna commodo congue. Morbi tempor erat quam, dapibus suscipit tortor sodales in. Pellentesque mollis ac mauris quis scelerisque. Sed consequat libero in urna ultricies euismod. Aliquam lobortis, justo sit amet vestibulum commodo, justo urna blandit lorem, a efficitur justo odio eget magna. In quis lacus lectus. Donec id eros bibendum, malesuada nisi fermentum, vestibulum massa."
+        app:layout_constraintTop_toBottomOf="@+id/imageViewA" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="267dp"
+        android:layout_height="49dp"
+        android:hint="text"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/imageViewB"
+        app:layout_constraintTop_toTopOf="@+id/imageViewB">
+
+    </EditText>
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

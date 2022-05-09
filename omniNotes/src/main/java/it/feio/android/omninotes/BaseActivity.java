@@ -82,7 +82,7 @@ public class BaseActivity extends AppCompatActivity {
         menuKeyField.setBoolean(config, false);
       }
     } catch (Exception e) {
-      LogDelegate.w("Just a little issue in physical menu button management", e);
+      //LogDelegate.w("Just a little issue in physical menu button management", e);
     }
     super.onCreate(savedInstanceState);
   }

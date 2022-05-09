@@ -30,10 +30,13 @@ import androidx.core.view.ViewPropertyAnimatorListener;
 import androidx.recyclerview.widget.RecyclerView;
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.smartlook.android.core.api.Smartlook;
+
 import it.feio.android.omninotes.OmniNotes;
 import it.feio.android.omninotes.R;
 import it.feio.android.omninotes.helpers.LogDelegate;
 import it.feio.android.omninotes.models.listeners.OnFabItemClickedListener;
+import it.feio.android.omninotes.smartlook.SmartlookHandler;
 
 public class Fab {
 
@@ -62,6 +65,7 @@ public class Fab {
         .findViewById(R.id.fab_expand_menu_button);
     fabAddButton.setOnClickListener(v -> {
       if (!isExpanded() && expandOnLongClick) {
+        SmartlookHandler.onFabClick();
         performAction(v);
       } else {
         performToggle();
@@ -91,6 +95,8 @@ public class Fab {
 
     floatingActionsMenu.findViewById(R.id.fab_checklist).setOnClickListener(onClickListener);
     floatingActionsMenu.findViewById(R.id.fab_camera).setOnClickListener(onClickListener);
+    floatingActionsMenu.findViewById(R.id.fab_all_preferences).setOnClickListener(onClickListener);
+    floatingActionsMenu.findViewById(R.id.fab_sensitivity_playground).setOnClickListener(onClickListener);
 
     if (!expandOnLongClick) {
       View noteBtn = floatingActionsMenu.findViewById(R.id.fab_note);
