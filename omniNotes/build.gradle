@@ -207,7 +207,7 @@ dependencies {
     /**
      * Smartlook SDK dependency.
      */
-    implementation 'com.smartlook.android:smartlook-analytics-smartlooksdk:2.0.0-pre-11'
+    implementation 'com.smartlook.android:smartlook-analytics:2.0.0-pre-12'
 
     // Flavors specific dependencies
     playImplementation 'io.nlopez.smartlocation:library:3.2.4'
