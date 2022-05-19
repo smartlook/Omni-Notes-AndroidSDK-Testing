@@ -44,21 +44,21 @@ allprojects {
         /**
          * Smartlook production release repository.
          */
-//        maven {
-//            url "https://sdk.smartlook.com/android/release"
-//        }
+        maven {
+            url "https://sdk.smartlook.com/android/release"
+        }
 
         /**
          * Smartlook test release repository.
          */
-        maven {
-            allowInsecureProtocol = true
-            url "http://artifactory.smartlook.com:8081/artifactory/libs-release-local"
-            credentials {
-                username = project.findProperty("sl_artifactory_username")
-                password = project.findProperty("sl_artifactory_password")
-            }
-        }
+//        maven {
+//            allowInsecureProtocol = true
+//            url "http://artifactory.smartlook.com:8081/artifactory/libs-release-local"
+//            credentials {
+//                username = project.findProperty("sl_artifactory_username")
+//                password = project.findProperty("sl_artifactory_password")
+//            }
+//        }
     }
 }
 
