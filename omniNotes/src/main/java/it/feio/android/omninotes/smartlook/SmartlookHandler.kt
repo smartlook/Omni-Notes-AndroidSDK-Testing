@@ -178,7 +178,7 @@ object SmartlookHandler {
             R.id.fab_all_preferences -> {
                 with(Smartlook.instance.state) {
                     Log.d("Smartlook", "State\n" +
-                            "isRecording: ${status.isRecording()}\n" +
+                            "isRecording: ${status is Status.Recording}\n" +
                             "status = ${status.javaClass.simpleName}\n" +
                             "cause = ${if (status is Status.NotRecording) (status as Status.NotRecording).cause else "-"}\n" +
                             "projectKey = $projectKey\n" +
@@ -208,14 +208,16 @@ object SmartlookHandler {
      */
     @JvmStatic
     fun onMainActivityUIInit(toolbar: Toolbar) {
-        Smartlook.instance.sensitivity.recordingMask = RecordingMask(
-            listOf(
-                RecordingMask.Element(
+        toolbar.run {
+            Smartlook.instance.sensitivity.recordingMask = RecordingMask(
+                listOf(
+                    RecordingMask.Element(
                         toolbar.getRectOnScreen(),
                         RecordingMask.Element.Type.COVERING
+                    )
                 )
             )
-        )
+        }
     }
 
     /**
