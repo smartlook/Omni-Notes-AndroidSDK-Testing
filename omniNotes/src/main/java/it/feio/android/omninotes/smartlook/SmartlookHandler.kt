@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -49,6 +51,30 @@ object SmartlookHandler {
         // Start recording
         instance.start()
 
+        Handler(Looper.getMainLooper()).postDelayed({
+            with(Smartlook.instance.state) {
+                Log.d(
+                    "Smartlook", "State\n" +
+                            "isRecording: ${status.isRecording}\n" +
+                            "status = ${status.javaClass.simpleName}\n" +
+                            "cause = ${if (status is Status.NotRecording) (status as Status.NotRecording).cause else "-"}\n" +
+                            "projectKey = $projectKey\n" +
+                            "frameRate = $frameRate\n" +
+                            "renderingMode = ${renderingMode.name}\n" +
+                            "renderingModeOption = ${renderingModeOption?.name}\n" +
+                            "isAdaptiveFrameRateEnabled = $isAdaptiveFrameRateEnabled\n" +
+                            "isSurfaceCaptureEnabled = $isSurfaceCaptureEnabled\n" +
+                            "isUploadUsingAndroidJobsEnabled = $isUploadUsingAndroidJobsEnabled\n" +
+                            "eventTracking.navigation.isActivityEnabled: ${eventTracking.navigation.isActivityEnabled}\n" +
+                            "eventTracking.navigation.isFragmentEnabled: ${eventTracking.navigation.isFragmentEnabled}\n" +
+                            "eventTracking.interaction.isTouchEnabled: ${eventTracking.interaction.isTouchEnabled}\n" +
+                            "eventTracking.interaction.isSelectorEnabled: ${eventTracking.interaction.isSelectorEnabled}\n" +
+                            "eventTracking.interaction.isRageClickEnabled: ${eventTracking.interaction.isRageClickEnabled}"
+                )
+            }
+        }, 10)
+
+
         // Open new session
         instance.user.session.openNew()
 
@@ -57,7 +83,7 @@ object SmartlookHandler {
 
         // Set sample "global" event properties
         instance.eventProperties
-                .putString("global_property", "test")
+            .putString("global_property", "test")
 
         /**
          * User API.
@@ -71,7 +97,7 @@ object SmartlookHandler {
             email = "test@test.com"
             name = "John Tester"
             properties
-                    .putString("custom_property", "test")
+                .putString("custom_property", "test")
 
             // Listen to user URL change
             listeners += object : User.Listener {
@@ -143,7 +169,7 @@ object SmartlookHandler {
      */
     @JvmStatic
     fun onFabItemClick(context: Context?, id: Int) {
-        when(id) {
+        when (id) {
 
             /**
              * "Photo" item clicked.
@@ -159,8 +185,8 @@ object SmartlookHandler {
              */
             R.id.fab_checklist -> {
                 val props = Properties()
-                        .putString("id", id.toString())
-                        .putString("test", "test")
+                    .putString("id", id.toString())
+                    .putString("test", "test")
 
                 Smartlook.instance.trackEvent("fab_checklist_item_click", props)
             }
@@ -177,22 +203,24 @@ object SmartlookHandler {
              */
             R.id.fab_all_preferences -> {
                 with(Smartlook.instance.state) {
-                    Log.d("Smartlook", "State\n" +
-                            "isRecording: ${status.isRecording()}\n" +
-                            "status = ${status.javaClass.simpleName}\n" +
-                            "cause = ${if (status is Status.NotRecording) (status as Status.NotRecording).cause else "-"}\n" +
-                            "projectKey = $projectKey\n" +
-                            "frameRate = $frameRate\n" +
-                            "renderingMode = ${renderingMode.name}\n" +
-                            "renderingModeOption = ${renderingModeOption?.name}\n" +
-                            "isAdaptiveFrameRateEnabled = $isAdaptiveFrameRateEnabled\n" +
-                            "isSurfaceCaptureEnabled = $isSurfaceCaptureEnabled\n" +
-                            "isUploadUsingAndroidJobsEnabled = $isUploadUsingAndroidJobsEnabled\n" +
-                            "eventTracking.navigation.isActivityEnabled: ${eventTracking.navigation.isActivityEnabled}\n" +
-                            "eventTracking.navigation.isFragmentEnabled: ${eventTracking.navigation.isFragmentEnabled}\n" +
-                            "eventTracking.interaction.isTouchEnabled: ${eventTracking.interaction.isTouchEnabled}\n" +
-                            "eventTracking.interaction.isSelectorEnabled: ${eventTracking.interaction.isSelectorEnabled}\n" +
-                            "eventTracking.interaction.isRageClickEnabled: ${eventTracking.interaction.isRageClickEnabled}" )
+                    Log.d(
+                        "Smartlook", "State\n" +
+                                "isRecording: ${status.isRecording}\n" +
+                                "status = ${status.javaClass.simpleName}\n" +
+                                "cause = ${if (status is Status.NotRecording) (status as Status.NotRecording).cause else "-"}\n" +
+                                "projectKey = $projectKey\n" +
+                                "frameRate = $frameRate\n" +
+                                "renderingMode = ${renderingMode.name}\n" +
+                                "renderingModeOption = ${renderingModeOption?.name}\n" +
+                                "isAdaptiveFrameRateEnabled = $isAdaptiveFrameRateEnabled\n" +
+                                "isSurfaceCaptureEnabled = $isSurfaceCaptureEnabled\n" +
+                                "isUploadUsingAndroidJobsEnabled = $isUploadUsingAndroidJobsEnabled\n" +
+                                "eventTracking.navigation.isActivityEnabled: ${eventTracking.navigation.isActivityEnabled}\n" +
+                                "eventTracking.navigation.isFragmentEnabled: ${eventTracking.navigation.isFragmentEnabled}\n" +
+                                "eventTracking.interaction.isTouchEnabled: ${eventTracking.interaction.isTouchEnabled}\n" +
+                                "eventTracking.interaction.isSelectorEnabled: ${eventTracking.interaction.isSelectorEnabled}\n" +
+                                "eventTracking.interaction.isRageClickEnabled: ${eventTracking.interaction.isRageClickEnabled}"
+                    )
                 }
             }
             R.id.fab_sensitivity_playground -> {
@@ -208,14 +236,16 @@ object SmartlookHandler {
      */
     @JvmStatic
     fun onMainActivityUIInit(toolbar: Toolbar) {
-        Smartlook.instance.sensitivity.recordingMask = RecordingMask(
-            listOf(
-                RecordingMask.Element(
+        toolbar.post {
+            Smartlook.instance.sensitivity.recordingMask = RecordingMask(
+                listOf(
+                    RecordingMask.Element(
                         toolbar.getRectOnScreen(),
                         RecordingMask.Element.Type.COVERING
+                    )
                 )
             )
-        )
+        }
     }
 
     /**
