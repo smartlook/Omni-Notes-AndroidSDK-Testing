@@ -86,6 +86,20 @@ object SmartlookHandler {
                     Log.d("Smartlook", "Session.Listener: onUrlChanged: $url")
                 }
             }
+
+
+            Smartlook.instance.user.listeners += object : User.Listener {
+                override fun onUrlChanged(url: URL) {
+
+                }
+            }
+
+            Smartlook.instance.user.session.listeners += object : Session.Listener {
+                override fun onUrlChanged(url: URL) {
+                    val a = url.toString()
+                }
+            }
+
         }
 
         /**
@@ -207,13 +221,17 @@ object SmartlookHandler {
      * Called in [MainActivity] on UI initialization. Covers whole Toolbar.
      */
     @JvmStatic
-    fun onMainActivityUIInit(toolbar: Toolbar) {
+    fun onMainActivityUIInit(activity: Activity, toolbar: Toolbar) {
         toolbar.run {
             Smartlook.instance.sensitivity.recordingMask = RecordingMask(
                 listOf(
                     RecordingMask.Element(
-                        toolbar.getRectOnScreen(),
+                        activity.window.decorView.getRectOnScreen(),
                         RecordingMask.Element.Type.COVERING
+                    ),
+                    RecordingMask.Element(
+                        toolbar.getRectOnScreen(),
+                        RecordingMask.Element.Type.ERASING
                     )
                 )
             )
