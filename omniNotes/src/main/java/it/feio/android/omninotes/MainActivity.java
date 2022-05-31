@@ -134,7 +134,7 @@ public class MainActivity extends BaseActivity implements
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setHomeButtonEnabled(true);
 
-    SmartlookHandler.onMainActivityUIInit(getToolbar());
+    SmartlookHandler.onMainActivityUIInit(this, getToolbar());
   }
 
 

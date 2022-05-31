@@ -14,7 +14,11 @@
         android:layout_height="wrap_content"
         android:text="Button A"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <tag android:id="@id/sl_sensitivity" android:value="true"/>
+
+    </Button>
 
     <Button
         android:id="@+id/buttonB"
