@@ -112,6 +112,20 @@ object SmartlookHandler {
                     Log.d("Smartlook", "Session.Listener: onUrlChanged: $url")
                 }
             }
+
+
+            Smartlook.instance.user.listeners += object : User.Listener {
+                override fun onUrlChanged(url: URL) {
+
+                }
+            }
+
+            Smartlook.instance.user.session.listeners += object : Session.Listener {
+                override fun onUrlChanged(url: URL) {
+                    val a = url.toString()
+                }
+            }
+
         }
 
         /**
@@ -203,24 +217,22 @@ object SmartlookHandler {
              */
             R.id.fab_all_preferences -> {
                 with(Smartlook.instance.state) {
-                    Log.d(
-                        "Smartlook", "State\n" +
-                                "isRecording: ${status.isRecording}\n" +
-                                "status = ${status.javaClass.simpleName}\n" +
-                                "cause = ${if (status is Status.NotRecording) (status as Status.NotRecording).cause else "-"}\n" +
-                                "projectKey = $projectKey\n" +
-                                "frameRate = $frameRate\n" +
-                                "renderingMode = ${renderingMode.name}\n" +
-                                "renderingModeOption = ${renderingModeOption?.name}\n" +
-                                "isAdaptiveFrameRateEnabled = $isAdaptiveFrameRateEnabled\n" +
-                                "isSurfaceCaptureEnabled = $isSurfaceCaptureEnabled\n" +
-                                "isUploadUsingAndroidJobsEnabled = $isUploadUsingAndroidJobsEnabled\n" +
-                                "eventTracking.navigation.isActivityEnabled: ${eventTracking.navigation.isActivityEnabled}\n" +
-                                "eventTracking.navigation.isFragmentEnabled: ${eventTracking.navigation.isFragmentEnabled}\n" +
-                                "eventTracking.interaction.isTouchEnabled: ${eventTracking.interaction.isTouchEnabled}\n" +
-                                "eventTracking.interaction.isSelectorEnabled: ${eventTracking.interaction.isSelectorEnabled}\n" +
-                                "eventTracking.interaction.isRageClickEnabled: ${eventTracking.interaction.isRageClickEnabled}"
-                    )
+                    Log.d("Smartlook", "State\n" +
+                            "isRecording: ${status is Status.Recording}\n" +
+                            "status = ${status.javaClass.simpleName}\n" +
+                            "cause = ${if (status is Status.NotRecording) (status as Status.NotRecording).cause else "-"}\n" +
+                            "projectKey = $projectKey\n" +
+                            "frameRate = $frameRate\n" +
+                            "renderingMode = ${renderingMode.name}\n" +
+                            "renderingModeOption = ${renderingModeOption?.name}\n" +
+                            "isAdaptiveFrameRateEnabled = $isAdaptiveFrameRateEnabled\n" +
+                            "isSurfaceCaptureEnabled = $isSurfaceCaptureEnabled\n" +
+                            "isUploadUsingAndroidJobsEnabled = $isUploadUsingAndroidJobsEnabled\n" +
+                            "eventTracking.navigation.isActivityEnabled: ${eventTracking.navigation.isActivityEnabled}\n" +
+                            "eventTracking.navigation.isFragmentEnabled: ${eventTracking.navigation.isFragmentEnabled}\n" +
+                            "eventTracking.interaction.isTouchEnabled: ${eventTracking.interaction.isTouchEnabled}\n" +
+                            "eventTracking.interaction.isSelectorEnabled: ${eventTracking.interaction.isSelectorEnabled}\n" +
+                            "eventTracking.interaction.isRageClickEnabled: ${eventTracking.interaction.isRageClickEnabled}" )
                 }
             }
             R.id.fab_sensitivity_playground -> {
@@ -235,13 +247,17 @@ object SmartlookHandler {
      * Called in [MainActivity] on UI initialization. Covers whole Toolbar.
      */
     @JvmStatic
-    fun onMainActivityUIInit(toolbar: Toolbar) {
-        toolbar.post {
+    fun onMainActivityUIInit(activity: Activity, toolbar: Toolbar) {
+        toolbar.run {
             Smartlook.instance.sensitivity.recordingMask = RecordingMask(
                 listOf(
                     RecordingMask.Element(
-                        toolbar.getRectOnScreen(),
+                        activity.window.decorView.getRectOnScreen(),
                         RecordingMask.Element.Type.COVERING
+                    ),
+                    RecordingMask.Element(
+                        toolbar.getRectOnScreen(),
+                        RecordingMask.Element.Type.ERASING
                     )
                 )
             )
