@@ -207,9 +207,9 @@ dependencies {
     implementation 'com.github.federicoiosue:pixlui:3.0.0'
 
 
-/**
- * Smartlook SDK dependency.
- */
+    /**
+     * Smartlook SDK dependency.
+     */
     implementation 'com.smartlook.android:smartlook-analytics:2.0.1'
 
     // Flavors specific dependencies

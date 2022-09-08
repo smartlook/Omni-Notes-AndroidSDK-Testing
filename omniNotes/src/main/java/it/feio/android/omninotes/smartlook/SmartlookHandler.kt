@@ -15,16 +15,19 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import com.smartlook.android.core.api.Smartlook
-import com.smartlook.android.core.api.User
 import com.smartlook.android.core.api.enumeration.Status
 import com.smartlook.android.core.api.extension.isSensitive
 import com.smartlook.android.core.api.model.Properties
 import com.smartlook.android.core.api.model.RecordingMask
-import com.smartlook.android.core.api.model.Referrer
+import com.smartlook.android.core.video.annotation.RenderingMode
 import com.smartlook.android.util.logging.annotation.LogAspect
 import it.feio.android.omninotes.R
 import it.feio.android.omninotes.SensitivityPlayground
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.concurrent.timerTask
 
