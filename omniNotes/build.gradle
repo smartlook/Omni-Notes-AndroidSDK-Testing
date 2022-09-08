@@ -192,6 +192,8 @@ dependencies {
     implementation 'com.github.sevar83:indeterminate-checkbox:1.0.5@aar'
     implementation 'com.pixplicity.easyprefs:library:1.9.0'
 
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+
     implementation('com.github.federicoiosue:simplegallery:3.0.1') {
         exclude group: 'com.android.support'
     }
@@ -204,10 +206,11 @@ dependencies {
     }
     implementation 'com.github.federicoiosue:pixlui:3.0.0'
 
-    /**
-     * Smartlook SDK dependency.
-     */
-    implementation "com.smartlook.android:smartlook-analytics:1.8.15-test1"
+
+/**
+ * Smartlook SDK dependency.
+ */
+    implementation 'com.smartlook.android:smartlook-analytics:2.0.1'
 
     // Flavors specific dependencies
     playImplementation 'io.nlopez.smartlocation:library:3.2.4'

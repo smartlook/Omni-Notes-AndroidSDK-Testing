@@ -33,6 +33,11 @@ import it.feio.android.omninotes.helpers.notifications.NotificationsHelper;
 import it.feio.android.omninotes.smartlook.SmartlookHandler;
 
 import org.acra.ACRA;
+import org.acra.config.ACRAConfigurationException;
+import org.acra.config.CoreConfigurationBuilder;
+import org.acra.config.HttpSenderConfigurationBuilder;
+import org.acra.config.ToastConfigurationBuilder;
+import org.acra.sender.HttpSender;
 
 
 public class OmniNotes extends MultiDexApplication {
@@ -50,7 +55,11 @@ public class OmniNotes extends MultiDexApplication {
   @Override
   protected void attachBaseContext(Context base) {
     super.attachBaseContext(base);
-    initAcra();
+    try {
+      initAcra();
+    } catch (ACRAConfigurationException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
@@ -63,13 +72,13 @@ public class OmniNotes extends MultiDexApplication {
     SmartlookHandler.onApplicationCreate();
   }
 
-  private void initAcra() {
+  private void initAcra() throws ACRAConfigurationException {
     if (!TextUtils.isEmpty(BuildConfig.CRASH_REPORTING_URL)) {
       HttpSenderConfigurationBuilder httpBuilder = new HttpSenderConfigurationBuilder()
           .withUri(BuildConfig.CRASH_REPORTING_URL)
           .withBasicAuthLogin(BuildConfig.CRASH_REPORTING_LOGIN)
           .withBasicAuthPassword(BuildConfig.CRASH_REPORTING_PASSWORD)
-          .withHttpMethod(Method.POST)
+          .withHttpMethod(HttpSender.Method.POST)
           .withEnabled(true);
 
       ToastConfigurationBuilder toastBuilder = new ToastConfigurationBuilder()
