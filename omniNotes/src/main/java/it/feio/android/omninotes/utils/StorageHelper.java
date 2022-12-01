@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2020 Federico Iosue (federico@iosue.it)
+ * Copyright (C) 2013-2022 Federico Iosue (federico@iosue.it)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -151,6 +151,18 @@ public class StorageHelper {
 
     }
     return file;
+  }
+
+  public static boolean copyFile(Context context, Uri fileUri, Uri targetUri) {
+    ContentResolver content = context.getContentResolver();
+    try (var is = content.openInputStream(fileUri);
+        var os = content.openOutputStream(targetUri)) {
+      IOUtils.copy(is, os);
+      return true;
+    } catch (IOException e) {
+      LogDelegate.e("Error copying file", e);
+      return false;
+    }
   }
 
   public static void copyFile(File source, File destination, boolean failOnError) throws IOException {

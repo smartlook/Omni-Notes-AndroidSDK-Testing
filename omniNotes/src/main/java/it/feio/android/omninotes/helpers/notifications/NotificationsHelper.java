@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2020 Federico Iosue (federico@iosue.it)
+ * Copyright (C) 2013-2022 Federico Iosue (federico@iosue.it)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 package it.feio.android.omninotes.helpers.notifications;
 
 import android.annotation.TargetApi;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -35,6 +34,7 @@ import android.provider.Settings;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationCompat.Builder;
 import com.pixplicity.easyprefs.library.Prefs;
+import it.feio.android.omninotes.MainActivity;
 import it.feio.android.omninotes.R;
 import lombok.NonNull;
 
@@ -191,13 +191,16 @@ public class NotificationsHelper {
   }
 
   public NotificationsHelper show(long id) {
-    Notification mNotification = mBuilder.build();
+    var mNotification = mBuilder.build();
     if (mNotification.contentIntent == null) {
-      // Creates a dummy PendingIntent
-      mBuilder.setContentIntent(PendingIntent.getActivity(mContext, 0, new Intent(),
-          PendingIntent.FLAG_UPDATE_CURRENT));
+      var pIntentFlags = PendingIntent.FLAG_UPDATE_CURRENT;
+      if (android.os.Build.VERSION.SDK_INT >= 23) {
+        pIntentFlags = pIntentFlags | PendingIntent.FLAG_IMMUTABLE;
+      }
+      var emptyExplicitIntent = new Intent(mContext, MainActivity.class);
+      var pendingIntent = PendingIntent.getActivity(mContext, 0, emptyExplicitIntent, pIntentFlags);
+      mBuilder.setContentIntent(pendingIntent);
     }
-    // Builds an anonymous Notification object from the builder, and passes it to the NotificationManager
     mNotificationManager.notify(String.valueOf(id), 0, mBuilder.build());
     return this;
   }
